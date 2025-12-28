@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Lista de Compras </title>
+</head>
+<body>
+    <h1> 🛒 Lista de Compras </h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="nome" placeholder="Novo_item">
+        <button type="submit"> Adicionar </button>
+     </form>
+
+     <ul>
+        {% for item in itens %}
+        <li>
+            {% if item.comprado %}
+                <s> {{item.nome}} </s>
+            {% else %}
+                {{item.nome}}
+            {% endif %}
+
+            <a href=" {% url 'comprado' item.id %} "> ✔ </a>
+            <a href=" {% url 'deletar' item.id %} "> ❌ </a>
+
+        </li>
+        {% endfor %}
+     </ul>
+    
+</body>
+</html>
