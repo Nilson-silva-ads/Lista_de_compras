@@ -15,17 +15,17 @@ def lista_compras(request, lista_id):
     
     return render(request, 'compras/lista.html', {'itens': itens, 'lista': lista}) 
 
-def marcar_comprado(request, item_id):
-    item = Item.objects.get(id=item_id) #item recebe o valor do id passado na pagina html atraves do get.
+def marcar_comprado(request, lista_id, item_id):
+    item = get_object_or_404(Item, id=item_id, lista_id=lista_id)
     item.comprado = not item.comprado #muda a situação do item.comprado, se for False muda para True.
     item.save() #salva a alteração feita no banco de dados.
-    return redirect('lista') #apos salvar ele redireciona para a pagina lista(que a pagina inicial)
+    return redirect('lista_compras', lista_id=lista_id) #apos salvar ele redireciona para a pagina lista(que a pagina inicial)
 
 #Recebe da requiseção o item/id escolhido e acessa o medel fazendo a exclusão do item.
-def deletar_item(request, item_id):
-    item = Item.objects.get(id=item_id)
+def deletar_item(request, lista_id, item_id):
+    item = get_object_or_404(Item, id=item_id, lista_id=lista_id)
     item.delete()
-    return redirect('lista')
+    return redirect('lista_compras', lista_id=lista_id)
 
 def listas(request): #função para retornar todas as listas.
     listas = Lista_compras.objects.all().order_by('-criada_em') #listas vai receber de Listas_compras importadas do models, todos os objetos por ordem de criação('-criada_em')

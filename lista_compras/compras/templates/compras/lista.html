@@ -23,8 +23,8 @@
                 {{item.nome}}
             {% endif %}
 
-            <a href=" {% url 'comprado' item.id %} "> ✔ </a>
-            <a href=" {% url 'deletar' item.id %} "> ❌ </a>
+            <a href=" {% url 'comprado' lista.id item.id %} "> ✔ </a>
+            <a href=" {% url 'deletar' lista.id item.id %} "> ❌ </a>
 
         </li>
         {% endfor %}
