@@ -1,18 +1,19 @@
-from django.shortcuts import render, redirect
-from .models import Item
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Item, Lista_compras
 
 # Create your views here.
-def lista_compras(request):
-    itens = Item.objects.all()
+def lista_compras(request, lista_id):
+    lista = get_object_or_404(Lista_compras, id=lista_id) #lista recebe os objetos diretos da lista_compras pelo seu id, se nao encontrar ele exibe uma pagina de erro 404 automaticamente.
+    itens = lista.itens.all().order_by('-criada_em') #itens recebe uma todos os itens da lista por ordem de cricação.
 
     #Se o usuario enviou um formulario do tipo POST.
     if request.method == 'POST':
-        nome = request.POST.get('nome') #pega o valor digitado no formulario(pagina html) pelo usuario.
+        nome = request.POST.get('nome', '').strip() #pega o valor digitado no formulario(pagina html) pelo usuario.
         if nome: #Se foi colocado algum nome no formulario, ele será craido e depois a pagina sera redirecionada para lista.
-            Item.objects.create(nome=nome)
-            return redirect('lista')
+            Item.objects.create(nome=nome, lista=lista)
+            return redirect('lista_compras', lista_id=lista.id)
     
-    return render(request, 'compras/lista.html', {'itens': itens}) 
+    return render(request, 'compras/lista.html', {'itens': itens, 'lista': lista}) 
 
 def marcar_comprado(request, item_id):
     item = Item.objects.get(id=item_id) #item recebe o valor do id passado na pagina html atraves do get.
@@ -25,3 +26,17 @@ def deletar_item(request, item_id):
     item = Item.objects.get(id=item_id)
     item.delete()
     return redirect('lista')
+
+def listas(request): #função para retornar todas as listas.
+    listas = Lista_compras.objects.all().order_by('-criada_em') #listas vai receber de Listas_compras importadas do models, todos os objetos por ordem de criação('-criada_em')
+    return render(request, 'compras/listas.html', {'listas': listas}) #retornando o caminho de onde esntão todas as listas.
+
+#funcao para criar uma nova lista.
+def nova_lista(request):
+    if request.method == 'POST': #se a requisição tiver o metodo post ele vai receber o nome informado no formulario.
+        nome = request.POST.get('nome', '').strip()
+        if nome: #Se tiver algum nome no formulario ele vai acionar o listas_compras do model e criar um nome para a lista.
+            Lista_compras.objects.create(nome=nome)
+            return redirect('listas')
+        
+    return render(request, 'compras/nova_lista.html')
