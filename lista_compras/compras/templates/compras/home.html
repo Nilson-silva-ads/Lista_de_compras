@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Listas de Compras</title>
+</head>
+<body>
+    <h1>Minhas Listas de Compras 📝</h1>
+
+    <a href="{% url 'nova_lista' %}">
+        <button style="background-color: #28a745; color: white; border: none; padding: 10px; cursor: pointer;">
+            + Criar Nova Lista
+        </button>
+    </a>
+
+    <hr>
+
+    <ul>
+        {% for lista in listas %}
+            
+                <li style="margin-bottom: 10px;">
+                    <strong>
+                        <a href="{% url 'lista_compras' lista.id %}">{{ lista.nome }}</a>
+                    </strong>
+                    <small>(Criada em: {{ lista.criada_em|date:"d/m/Y" }})</small>
+                    <a href=" {% url 'deleta' lista.id  %} "> ❌ </a>
+                </li>
+           
+         {% empty %}
+            <li>Você ainda não criou nenhuma lista.</li>
+
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

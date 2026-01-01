@@ -6,29 +6,33 @@
     <title> Lista de Compras </title>
 </head>
 <body>
-    <h1> 🛒 Lista de Compras </h1>
+    <h1> 🛒 {{ lista.nome }} </h1>
 
     <form method="post">
         {% csrf_token %}
-        <input type="text" name="nome" placeholder="Novo_item">
+        <input type="text" name="nome" placeholder="Novo_item" required>
         <button type="submit"> Adicionar </button>
      </form>
 
      <ul>
         {% for item in itens %}
-        <li>
-            {% if item.comprado %}
-                <s> {{item.nome}} </s>
-            {% else %}
-                {{item.nome}}
-            {% endif %}
+            <li>
+                {% if item.comprado %}
+                    <s> {{item.nome}} </s>
+                {% else %}
+                    {{item.nome}}
+                {% endif %}
 
-            <a href=" {% url 'comprado' lista.id item.id %} "> ✔ </a>
-            <a href=" {% url 'deletar' lista.id item.id %} "> ❌ </a>
+                <a href=" {% url 'comprado' lista.id item.id %} "> ✔ </a>
+                <a href=" {% url 'deletar' lista.id item.id %} "> ❌ </a>
 
-        </li>
+            </li>
+        {% empty %}
+            <li> Nenhum item nesta lista. </li>
         {% endfor %}
-     </ul>
+
+    </ul>
+
     
 </body>
 </html>

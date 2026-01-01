@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Nova Lista</title>
+</head>
+<body>
+    <h1>Criar Nova Lista de Compras 🆕</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_nome">Nome da Lista:</label>
+        <input type="text" name="nome" id="id_nome" placeholder="Ex: Mercado, Feira..." required>
+        
+        <button type="submit">Salvar Lista</button>
+    </form>
+
+    <br>
+    <a href="{% url 'home' %}">⬅ Voltar para minhas listas</a>
+
+</body>
+</html>

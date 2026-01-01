@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Item, Lista_compras
 
 # Create your views here.
-def lista_compras(request, lista_id):
+def lista_compras(request, lista_id=0):
     lista = get_object_or_404(Lista_compras, id=lista_id) #lista recebe os objetos diretos da lista_compras pelo seu id, se nao encontrar ele exibe uma pagina de erro 404 automaticamente.
     itens = lista.itens.all().order_by('-criada_em') #itens recebe uma todos os itens da lista por ordem de cricação.
 
@@ -10,8 +10,8 @@ def lista_compras(request, lista_id):
     if request.method == 'POST':
         nome = request.POST.get('nome', '').strip() #pega o valor digitado no formulario(pagina html) pelo usuario.
         if nome: #Se foi colocado algum nome no formulario, ele será craido e depois a pagina sera redirecionada para lista.
-            Item.objects.create(nome=nome, lista=lista)
-            return redirect('lista_compras', lista_id=lista.id)
+            Item.objects.create(nome=nome, lista_id=lista_id)
+            return redirect('lista_compras', lista_id=lista_id)
     
     return render(request, 'compras/lista.html', {'itens': itens, 'lista': lista}) 
 
@@ -27,9 +27,14 @@ def deletar_item(request, lista_id, item_id):
     item.delete()
     return redirect('lista_compras', lista_id=lista_id)
 
+def deletar_lista(request, lista_id):
+    lista = get_object_or_404(lista_compras, id=lista_id)
+    lista.delete()
+    return redirect('listas')
+
 def listas(request): #função para retornar todas as listas.
     listas = Lista_compras.objects.all().order_by('-criada_em') #listas vai receber de Listas_compras importadas do models, todos os objetos por ordem de criação('-criada_em')
-    return render(request, 'compras/listas.html', {'listas': listas}) #retornando o caminho de onde esntão todas as listas.
+    return render(request, 'compras/lista.html', {'listas': listas}) #retornando o caminho de onde esntão todas as listas.
 
 #funcao para criar uma nova lista.
 def nova_lista(request):
@@ -40,3 +45,7 @@ def nova_lista(request):
             return redirect('listas')
         
     return render(request, 'compras/nova_lista.html')
+
+def home(request):
+    listas = Lista_compras.objects.all()
+    return render(request, 'compras/home.html', {'listas':listas})
