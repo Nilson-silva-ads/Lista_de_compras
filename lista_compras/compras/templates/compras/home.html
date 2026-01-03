@@ -24,7 +24,7 @@
                         <a href="{% url 'lista_compras' lista.id %}">{{ lista.nome }}</a>
                     </strong>
                     <small>(Criada em: {{ lista.criada_em|date:"d/m/Y" }})</small>
-                    <a href=" {% url 'deleta' lista.id  %} "> ❌ </a>
+                    <a href=" {% url 'deletar_lista' lista.id  %} "> ❌ </a>
                 </li>
            
          {% empty %}

@@ -8,5 +8,5 @@ urlpatterns = [
     path('lista/<int:lista_id>/', views.deletar_lista, name='deleta'),
 
     path('lista/<int:lista_id>/comprado/<int:item_id>/', views.marcar_comprado, name='comprado'),
-    path('lista/<int:lista_id>/deletar/<int:item_id>/', views.deletar_item, name='deletar'),
+    path('deletar-lista/<int:lista_id>/', views.deletar_lista, name='deletar_lista'),
 ]    
